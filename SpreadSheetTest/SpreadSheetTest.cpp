@@ -2,12 +2,69 @@
 //
 
 #include "pch.h"
+
 #include <iostream>
 
+#include"SpreadSheet.h"
+
+#include<typeinfo>
+
 int main()
+
 {
-    std::cout << "Hello World!\n"; 
+
+	CSpreadSheet sheet("sheetfilename.xls", "sheetname",true);
+
+	CStringArray headers, row,Rows;
+
+	headers.Add("str1");
+
+	headers.Add("str2");
+
+	headers.Add("str3");
+
+	row.Add("hello");
+
+	row.Add("world");
+
+	row.Add("!");
+
+
+
+	sheet.BeginTransaction();
+
+	//似乎必须要有headers，没有headers的话好像就没有输出文件。。。
+
+	sheet.AddHeaders(headers);
+
+	sheet.AddRow(row);
+
+	sheet.Commit();
+
+	//sheet.Convert(";");
+	printf("表格有%ld行！\n", sheet.GetTotalRows());
+	for(int i=1;i<=sheet.GetTotalRows();i++)
+	{
+		sheet.ReadRow(Rows, i);
+		printf("第%d行，有%d个元素\n", i,Rows.GetSize());
+		for (int j = 1; j <= Rows.GetSize(); j++)
+		{
+			if (j != Rows.GetSize())
+			{
+				printf("i=%d,j=%d\t", i, j);
+				printf(Rows.GetAt(j-1));
+				printf("\t");
+			}
+			else
+			{
+				printf("i=%d,j=%d\t", i, j);
+				printf(Rows.GetAt(j - 1));
+				printf("\n");
+			}
+		}
+	}
 }
+
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
